@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { isTokenExpired } from '@/lib/auth/token';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
@@ -14,6 +15,14 @@ apiClient.interceptors.request.use((config) => {
   if (typeof window !== 'undefined') {
     const token = localStorage.getItem('token');
     if (token) {
+      if (isTokenExpired(token)) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        if (!window.location.pathname.startsWith('/auth')) {
+          window.location.href = '/auth/login';
+        }
+        return config;
+      }
       config.headers.Authorization = `Bearer ${token}`;
     }
   }
@@ -22,16 +31,39 @@ apiClient.interceptors.request.use((config) => {
 
 // Handle auth errors
 apiClient.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    const data = response.data;
+
+    // Expect standardized backend response
+    if (data && typeof data.success !== 'undefined') {
+      if (!data.success) {
+        return Promise.reject(
+          new Error(data.error?.message || 'Request failed')
+        );
+      }
+
+      // unwrap data
+      response.data = data.data;
+    }
+
+    return response;
+  },
   (error) => {
     if (error.response?.status === 401) {
       if (typeof window !== 'undefined') {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        window.location.href = '/auth/login';
+        if (!window.location.pathname.startsWith('/auth')) {
+          window.location.href = '/auth/login';
+        }
       }
     }
-    return Promise.reject(error);
+    return Promise.reject(
+      new Error(
+        error.response?.data?.error?.message ||
+        error.message ||
+        'Request failed'
+      )
+    );
   }
 );
-

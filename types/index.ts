@@ -26,6 +26,13 @@ export interface DSAProblem {
   paidOnly?: boolean;
   hasSolution?: boolean;
   hasVideoSolution?: boolean;
+  description?: string;
+  examples?: Array<{
+    input: string;
+    output: string;
+    explanation?: string;
+  }>;
+  constraints?: string[];
 }
 
 export interface DSAList {
@@ -66,6 +73,17 @@ export interface LLDAnswer {
   userId: string;
   questionId: string;
   answer: string;
+  rating?: number;
+  feedback?: string;
+  submittedAt: string;
+}
+
+export interface DSASolution {
+  _id: string;
+  userId: string;
+  problemId: string;
+  solution: string;
+  language: string;
   rating?: number;
   feedback?: string;
   submittedAt: string;

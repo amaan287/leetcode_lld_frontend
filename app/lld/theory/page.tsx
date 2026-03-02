@@ -142,8 +142,8 @@ export default function TheoryPage() {
       case 'introduction':
         return (
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Introduction to Low-Level Design</h2>
-            <p className="text-gray-700 mb-4">
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Introduction to Low-Level Design</h2>
+            <p className="text-gray-700 dark:text-gray-300 mb-4">
               Low-Level Design (LLD) is a detailed design phase that focuses on the implementation details
               of a system. It involves designing classes, interfaces, data structures, and algorithms that
               will be used to build the system.
@@ -159,11 +159,11 @@ export default function TheoryPage() {
       case 'principles':
         return (
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Key Principles</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Key Principles</h2>
             <div className="space-y-4">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">SOLID Principles</h3>
-                <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">SOLID Principles</h3>
+                <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 ml-4">
                   <li><strong>Single Responsibility:</strong> A class should have only one reason to change</li>
                   <li><strong>Open/Closed:</strong> Open for extension, closed for modification</li>
                   <li><strong>Liskov Substitution:</strong> Derived classes must be substitutable for their base classes</li>
@@ -172,8 +172,8 @@ export default function TheoryPage() {
                 </ul>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Other Key Principles</h3>
-                <ul className="list-disc list-inside space-y-2 text-gray-700 ml-4">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Other Key Principles</h3>
+                <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300 ml-4">
                   <li><strong>DRY (Don't Repeat Yourself):</strong> Avoid code duplication</li>
                   <li><strong>Separation of Concerns:</strong> Each class should have a single, well-defined purpose</li>
                   <li><strong>Encapsulation:</strong> Hide internal implementation details</li>
@@ -190,11 +190,11 @@ export default function TheoryPage() {
         return (
           <section>
             <div className="mb-6">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-2">Design Patterns</h2>
-              <p className="text-gray-700 mb-4">
+              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">Design Patterns</h2>
+              <p className="text-gray-700 dark:text-gray-300 mb-4">
                 Design patterns are typical solutions to common problems in software design. Each pattern is like a blueprint
                 that you can customize to solve a particular design problem in your code. Reference:{' '}
-                <a href="https://refactoring.guru/design-patterns" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                <a href="https://refactoring.guru/design-patterns" target="_blank" rel="noopener noreferrer" className="text-gray-700 dark:text-gray-400 hover:underline">
                   refactoring.guru
                 </a>
               </p>
@@ -203,18 +203,18 @@ export default function TheoryPage() {
             <div className="space-y-8">
               {/* Creational Patterns */}
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 pb-2 border-b border-gray-200 dark:border-gray-800">
                   Creational Patterns
                 </h3>
-                <p className="text-gray-600 mb-4 text-sm">
+                <p className="text-gray-600 dark:text-gray-400 mb-4 text-sm">
                   These patterns provide various object creation mechanisms, enhancing flexibility and reuse of existing code.
                 </p>
                 <div className="space-y-6">
                   {designPatterns.creational.map((pattern, idx) => (
-                    <div key={idx} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                      <h4 className="text-lg font-semibold text-gray-900 mb-2">{pattern.name}</h4>
-                      <p className="text-gray-700 mb-2">{pattern.description}</p>
-                      <p className="text-sm text-gray-600">
+                    <div key={idx} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                      <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{pattern.name}</h4>
+                      <p className="text-gray-700 dark:text-gray-300 mb-2">{pattern.description}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
                         <strong>Use when:</strong> {pattern.useCase}
                       </p>
                     </div>
@@ -224,18 +224,18 @@ export default function TheoryPage() {
 
               {/* Structural Patterns */}
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 pb-2 border-b border-gray-200 dark:border-gray-800">
                   Structural Patterns
                 </h3>
-                <p className="text-gray-600 mb-4 text-sm">
+                <p className="text-gray-600 dark:text-gray-400 mb-4 text-sm">
                   These patterns explain how to assemble objects and classes into larger structures while keeping these structures flexible and efficient.
                 </p>
                 <div className="space-y-6">
                   {designPatterns.structural.map((pattern, idx) => (
-                    <div key={idx} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                      <h4 className="text-lg font-semibold text-gray-900 mb-2">{pattern.name}</h4>
-                      <p className="text-gray-700 mb-2">{pattern.description}</p>
-                      <p className="text-sm text-gray-600">
+                    <div key={idx} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                      <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{pattern.name}</h4>
+                      <p className="text-gray-700 dark:text-gray-300 mb-2">{pattern.description}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
                         <strong>Use when:</strong> {pattern.useCase}
                       </p>
                     </div>
@@ -245,18 +245,18 @@ export default function TheoryPage() {
 
               {/* Behavioral Patterns */}
               <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4 pb-2 border-b border-gray-200">
+                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-4 pb-2 border-b border-gray-200 dark:border-gray-800">
                   Behavioral Patterns
                 </h3>
-                <p className="text-gray-600 mb-4 text-sm">
+                <p className="text-gray-600 dark:text-gray-400 mb-4 text-sm">
                   These patterns are concerned with algorithms and the assignment of responsibilities between objects.
                 </p>
                 <div className="space-y-6">
                   {designPatterns.behavioral.map((pattern, idx) => (
-                    <div key={idx} className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                      <h4 className="text-lg font-semibold text-gray-900 mb-2">{pattern.name}</h4>
-                      <p className="text-gray-700 mb-2">{pattern.description}</p>
-                      <p className="text-sm text-gray-600">
+                    <div key={idx} className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+                      <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{pattern.name}</h4>
+                      <p className="text-gray-700 dark:text-gray-300 mb-2">{pattern.description}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
                         <strong>Use when:</strong> {pattern.useCase}
                       </p>
                     </div>
@@ -270,8 +270,8 @@ export default function TheoryPage() {
       case 'best-practices':
         return (
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Best Practices</h2>
-            <ul className="list-disc list-inside space-y-2 text-gray-700">
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Best Practices</h2>
+            <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
               <li>Start with requirements clarification</li>
               <li>Identify core entities and their relationships</li>
               <li>Design for extensibility and maintainability</li>
@@ -291,8 +291,8 @@ export default function TheoryPage() {
       case 'interview-questions':
         return (
           <section>
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">Common Interview Questions</h2>
-            <ul className="list-disc list-inside space-y-2 text-gray-700">
+            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Common Interview Questions</h2>
+            <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
               <li>Design a Parking Lot System</li>
               <li>Design a Library Management System</li>
               <li>Design a Snake and Ladder Game</li>
@@ -325,22 +325,21 @@ export default function TheoryPage() {
   return (
     <ProtectedRoute>
       <Navbar />
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
         <div className="flex">
           {/* Sidebar */}
-          <aside className="w-64 bg-white border-r border-gray-200 min-h-screen sticky top-0 h-screen overflow-y-auto">
+          <aside className="w-64 bg-white dark:bg-black border-r border-gray-200 dark:border-gray-800 min-h-screen sticky top-0 h-screen overflow-y-auto transition-colors">
             <div className="p-4">
-              <h1 className="text-xl font-bold text-gray-900 mb-6">LLD Theory</h1>
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white mb-6">LLD Theory</h1>
               <nav className="space-y-1">
                 {sidebarItems.map((item) => (
                   <button
                     key={item.id}
                     onClick={() => setActiveSection(item.id)}
-                    className={`w-full text-left px-4 py-2 rounded-md transition-colors ${
-                      activeSection === item.id
-                        ? 'bg-gray-100 text-gray-900 font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                    }`}
+                    className={`w-full text-left px-4 py-2 rounded-md transition-colors ${activeSection === item.id
+                      ? 'bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white font-medium'
+                      : 'text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-900'
+                      }`}
                   >
                     {item.label}
                   </button>
@@ -352,7 +351,7 @@ export default function TheoryPage() {
           {/* Main Content */}
           <main className="flex-1">
             <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-              <div className="bg-white rounded-lg shadow p-6">
+              <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-100 dark:border-gray-800 p-6 transition-colors">
                 {renderContent()}
               </div>
             </div>
@@ -362,4 +361,3 @@ export default function TheoryPage() {
     </ProtectedRoute>
   );
 }
-

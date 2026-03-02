@@ -3,6 +3,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { User } from '@/types';
+import { isTokenExpired } from '@/lib/auth/token';
 
 interface AuthState {
   user: User | null;
@@ -26,11 +27,18 @@ export const useAuth = create<AuthState>()(
       clearAuth: () => {
         if (typeof window !== 'undefined') {
           localStorage.removeItem('token');
+          localStorage.removeItem('user');
         }
         set({ user: null, token: null });
       },
       isAuthenticated: () => {
-        return get().user !== null && get().token !== null;
+        const token = get().token;
+        if (!token) return false;
+        if (isTokenExpired(token)) {
+          get().clearAuth();
+          return false;
+        }
+        return get().user !== null;
       },
     }),
     {
@@ -38,4 +46,3 @@ export const useAuth = create<AuthState>()(
     }
   )
 );
-

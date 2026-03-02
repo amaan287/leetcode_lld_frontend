@@ -67,8 +67,8 @@ export default function ListDetailPage() {
     return (
       <ProtectedRoute>
         <Navbar />
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <div>Loading...</div>
+        <div className="min-h-screen bg-gray-50 dark:bg-black flex items-center justify-center transition-colors duration-300">
+          <div className="text-gray-900 dark:text-white">Loading...</div>
         </div>
       </ProtectedRoute>
     );
@@ -78,8 +78,8 @@ export default function ListDetailPage() {
     return (
       <ProtectedRoute>
         <Navbar />
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-          <div>List not found</div>
+        <div className="min-h-screen bg-gray-50 dark:bg-black flex items-center justify-center transition-colors duration-300">
+          <div className="text-gray-900 dark:text-white">List not found</div>
         </div>
       </ProtectedRoute>
     );
@@ -90,38 +90,38 @@ export default function ListDetailPage() {
   return (
     <ProtectedRoute>
       <Navbar />
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
           <div className="mb-6">
             <button
               onClick={() => router.back()}
-              className="text-blackver:text-blue-700 mb-4"
+              className="text-black dark:text-white hover:text-gray-800 dark:hover:text-gray-200 mb-4 transition-colors"
             >
               ← Back to Lists
             </button>
-            <h1 className="text-3xl font-bold text-gray-900">{data.list.name}</h1>
-            <p className="text-gray-500 mt-2">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{data.list.name}</h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-2">
               {data.problems.length} problem{data.problems.length !== 1 ? 's' : ''}
             </p>
           </div>
 
-          <div className="bg-white rounded-lg shadow overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-200">
+          <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden transition-colors">
+            <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-800">
               <div className="flex justify-between items-center">
-                <h2 className="text-lg font-semibold">Problems</h2>
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Problems</h2>
                 {isOwner && (
                   <Link
                     href={`/dsa/lists/${listId}/add-problems`}
-                    className="text-sm text-black hover:text-blue-700"
+                    className="text-sm text-black dark:text-white hover:text-gray-800 dark:hover:text-gray-200 underline underline-offset-4"
                   >
                     Add Problems
                   </Link>
                 )}
               </div>
             </div>
-            <ul className="divide-y divide-gray-200">
+            <ul className="divide-y divide-gray-200 dark:divide-gray-800">
               {data.problems.map((item: ProblemWithStatus) => (
-                <li key={item.problem._id} className="px-6 py-4 hover:bg-gray-50">
+                <li key={item.problem._id} className="px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start flex-1">
                       <input
@@ -135,29 +135,28 @@ export default function ListDetailPage() {
                           );
                         }}
                         onClick={(e) => e.stopPropagation()}
-                        className="mt-1 h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
+                        className="mt-1 h-4 w-4 text-black dark:text-white focus:ring-black dark:focus:ring-white border-gray-300 dark:border-gray-700 rounded bg-white dark:bg-gray-900"
                       />
                       <Link
                         href={`/dsa/problems/${item.problem._id}`}
                         className="ml-4 flex-1 hover:opacity-80 transition-opacity cursor-pointer"
                       >
                         <div>
-                          <h3 className="text-lg font-medium text-gray-900">
+                          <h3 className="text-lg font-medium text-gray-900 dark:text-white">
                             {item.problem.title}
                           </h3>
-                          <p className="text-sm text-gray-500 mt-1">
+                          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                             ID: {item.problem.frontendQuestionId} • {item.problem.titleSlug}
                             {item.problem.acRate && ` • ${item.problem.acRate.toFixed(1)}% acceptance`}
                           </p>
                           <div className="mt-2 flex items-center space-x-4">
                             <span
-                              className={`px-2 py-1 text-xs font-semibold rounded ${
-                                item.problem.difficulty === 'Easy'
+                              className={`px-2 py-1 text-xs font-semibold rounded ${item.problem.difficulty === 'Easy'
                                   ? 'bg-green-100 text-green-800'
                                   : item.problem.difficulty === 'Medium'
-                                  ? 'bg-yellow-100 text-yellow-800'
-                                  : 'bg-red-100 text-red-800'
-                              }`}
+                                    ? 'bg-yellow-100 text-yellow-800'
+                                    : 'bg-red-100 text-red-800'
+                                }`}
                             >
                               {item.problem.difficulty}
                             </span>
@@ -171,7 +170,7 @@ export default function ListDetailPage() {
                                 {item.problem.topicTags.slice(0, 3).map((tag, idx) => (
                                   <span
                                     key={idx}
-                                    className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded"
+                                    className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded"
                                   >
                                     {tag.name || tag.slug}
                                   </span>
@@ -180,7 +179,7 @@ export default function ListDetailPage() {
                             )}
                           </div>
                           {item.status?.checkedAt && (
-                            <p className="text-xs text-gray-400 mt-1">
+                            <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
                               Completed on {new Date(item.status.checkedAt).toLocaleDateString()}
                             </p>
                           )}
@@ -204,12 +203,12 @@ export default function ListDetailPage() {
               ))}
             </ul>
             {data.problems.length === 0 && (
-              <div className="px-6 py-12 text-center text-gray-500">
+              <div className="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
                 No problems in this list yet.
                 {isOwner && (
                   <Link
                     href={`/dsa/lists/${listId}/add-problems`}
-                    className="text-black hover:text-blue-700 ml-1"
+                    className="text-black dark:text-white hover:text-gray-800 dark:hover:text-gray-200 ml-1 underline underline-offset-4"
                   >
                     Add some problems
                   </Link>
@@ -222,4 +221,3 @@ export default function ListDetailPage() {
     </ProtectedRoute>
   );
 }
-

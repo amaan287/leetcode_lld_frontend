@@ -94,21 +94,21 @@ export default function AddProblemsPage() {
   return (
     <ProtectedRoute>
       <Navbar />
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors duration-300">
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
           <button
             onClick={() => router.back()}
-            className="text-black hover:text-blue-700 mb-6"
+            className="text-black dark:text-white hover:text-gray-800 dark:hover:text-gray-200 mb-6 transition-colors"
           >
             ← Back to List
           </button>
 
-          <h1 className="text-3xl font-bold text-gray-900 mb-8">Add Problems to List</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Add Problems to List</h1>
 
-          <div className="bg-white p-6 rounded-lg shadow mb-8">
+          <div className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 mb-8 transition-colors">
             <div className="flex gap-4">
               <div className="flex-1">
-                <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-2">
+                <label htmlFor="search" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Search Problems by Title
                 </label>
                 <div className="relative">
@@ -117,7 +117,7 @@ export default function AddProblemsPage() {
                     id="search"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full border border-gray-300 rounded-md px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                    className="w-full border border-gray-300 dark:border-gray-700 dark:bg-black dark:text-white rounded-md px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white focus:border-transparent transition-all"
                     placeholder="Type problem title to search..."
                     autoFocus
                   />
@@ -135,7 +135,7 @@ export default function AddProblemsPage() {
                   )}
                 </div>
                 {loading && (
-                  <p className="text-sm text-gray-500 mt-2">Searching...</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">Searching...</p>
                 )}
               </div>
             </div>
@@ -143,13 +143,13 @@ export default function AddProblemsPage() {
 
           {searched && (
             <div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                 {problems.length > 0
                   ? `Found ${problems.length} problem${problems.length !== 1 ? 's' : ''}`
                   : 'No problems found'}
               </h2>
               {problems.length === 0 ? (
-                <div className="text-center py-12 text-gray-500 bg-white rounded-lg shadow">
+                <div className="text-center py-12 text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 transition-colors">
                   No problems found. Try a different search query.
                 </div>
               ) : (
@@ -162,66 +162,65 @@ export default function AddProblemsPage() {
                     return (
                       <div
                         key={problem._id}
-                        className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow cursor-pointer"
+                        className="bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-6 hover:shadow-lg transition-all cursor-pointer"
                       >
                         <div className="flex items-start justify-between">
                           <Link
                             href={`/dsa/problems/${problem._id}`}
                             className="flex-1 hover:opacity-80 transition-opacity"
                           >
-                          <div>
-                            <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                              {problem.title}
-                            </h3>
-                            <p className="text-sm text-gray-600 mb-3">
-                              ID: {problem.frontendQuestionId} • {problem.titleSlug}
-                              {problem.acRate && ` • ${problem.acRate.toFixed(1)}% acceptance`}
-                            </p>
-                            <div className="flex items-center space-x-4">
-                              <span
-                                className={`px-2 py-1 text-xs font-semibold rounded ${
-                                  problem.difficulty === 'Easy'
+                            <div>
+                              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-black dark:group-hover:text-white">
+                                {problem.title}
+                              </h3>
+                              <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                                ID: {problem.frontendQuestionId} • {problem.titleSlug}
+                                {problem.acRate && ` • ${problem.acRate.toFixed(1)}% acceptance`}
+                              </p>
+                              <div className="flex items-center space-x-4">
+                                <span
+                                  className={`px-2 py-1 text-xs font-semibold rounded ${problem.difficulty === 'Easy'
                                     ? 'bg-green-100 text-green-800'
                                     : problem.difficulty === 'Medium'
-                                    ? 'bg-yellow-100 text-yellow-800'
-                                    : 'bg-red-100 text-red-800'
-                                }`}
-                              >
-                                {problem.difficulty}
-                              </span>
-                              {problem.paidOnly && (
-                                <span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded">
-                                  Premium
+                                      ? 'bg-yellow-100 text-yellow-800'
+                                      : 'bg-red-100 text-red-800'
+                                    }`}
+                                >
+                                  {problem.difficulty}
                                 </span>
-                              )}
-                              {problem.topicTags && problem.topicTags.length > 0 && (
-                                <div className="flex flex-wrap gap-1">
-                                  {problem.topicTags.slice(0, 3).map((tag, idx) => (
-                                    <span
-                                      key={idx}
-                                      className="px-2 py-1 text-xs bg-gray-100 text-gray-700 rounded"
-                                    >
-                                      {tag.name || tag.slug}
-                                    </span>
-                                  ))}
-                                </div>
-                              )}
+                                {problem.paidOnly && (
+                                  <span className="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded">
+                                    Premium
+                                  </span>
+                                )}
+                                {problem.topicTags && problem.topicTags.length > 0 && (
+                                  <div className="flex flex-wrap gap-1">
+                                    {problem.topicTags.slice(0, 3).map((tag, idx) => (
+                                      <span
+                                        key={idx}
+                                        className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded"
+                                      >
+                                        {tag.name || tag.slug}
+                                      </span>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
                             </div>
-                          </div>
-                        </Link>
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleAddProblem(problem._id);
-                          }}
-                          disabled={addingProblems.has(problem._id)}
-                          className="ml-4 px-4 py-2 bg-black text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          {addingProblems.has(problem._id) ? 'Adding...' : 'Add to List'}
-                        </button>
+                          </Link>
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleAddProblem(problem._id);
+                            }}
+                            disabled={addingProblems.has(problem._id)}
+                            className="ml-4 px-4 py-2 bg-black dark:bg-white text-white dark:text-black rounded-md hover:bg-gray-800 dark:hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                          >
+                            {addingProblems.has(problem._id) ? 'Adding...' : 'Add to List'}
+                          </button>
+                        </div>
                       </div>
-                    </div>
                     );
                   })}
                 </div>
@@ -233,4 +232,3 @@ export default function AddProblemsPage() {
     </ProtectedRoute>
   );
 }
-

@@ -2,73 +2,61 @@
 
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
+import { useTheme } from '@/hooks/useTheme';
+import { Moon, Sun } from 'lucide-react';
 
 export default function Navbar() {
   const { user, isAuthenticated, clearAuth } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+  const { theme, toggleTheme } = useTheme();
 
   const handleLogout = () => {
     clearAuth();
     router.push('/auth/login');
   };
 
+  const navItem = (href: string, label: string) => (
+    <Link
+      href={href}
+      className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${pathname.startsWith(href)
+        ? 'bg-black text-white dark:bg-white dark:text-black'
+        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+        }`}
+    >
+      {label}
+    </Link>
+  );
+
   return (
-    <nav className="bg-white shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex">
-            <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="text-xl font-bold text-black">
-                DSA & LLD Platform
-              </Link>
-            </div>
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              <Link
-                href="/dsa"
-                className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-              >
-                DSA
-              </Link>
-              <Link
-                href="/lld"
-                className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-              >
-                LLD
-              </Link>
-            </div>
-          </div>
-          <div className="flex items-center">
-            {isAuthenticated() ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-gray-700">{user?.name}</span>
-                <button
-                  onClick={handleLogout}
-                  className="text-sm text-gray-500 hover:text-gray-700"
-                >
-                  Logout
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center space-x-4">
-                <Link
-                  href="/auth/login"
-                  className="text-sm text-gray-500 hover:text-gray-700"
-                >
-                  Login
-                </Link>
-                <Link
-                  href="/auth/register"
-                  className="text-sm text-white bg-black hover:bg-blue-700 px-4 py-2 rounded-md"
-                >
-                  Sign Up
-                </Link>
-              </div>
-            )}
-          </div>
+    <nav className="sticky top-0 z-50 backdrop-blur-md bg-white/70 dark:bg-black/70 border-b border-gray-200 dark:border-gray-800 shadow-sm">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <Link href="/" className="text-xl font-bold tracking-tight text-gray-900 dark:text-white">
+          AlgoLLD
+        </Link>
+
+        <div className="flex items-center gap-2">
+          {navItem('/dsa', 'DSA')}
+          {navItem('/lld', 'LLD')}
+
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+          >
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+
+          {isAuthenticated() && (
+            <button
+              onClick={handleLogout}
+              className="ml-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm rounded-md transition"
+            >
+              Logout
+            </button>
+          )}
         </div>
       </div>
     </nav>
   );
 }
-

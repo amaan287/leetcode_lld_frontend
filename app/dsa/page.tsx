@@ -58,7 +58,7 @@ export default function DSAPage() {
       setNewListName('');
       setIsPublic(false);
       setShowCreateForm(false);
-      
+
       // Show problem cards after creating list
       setNewlyCreatedListId(newList._id);
       await loadProblems();
@@ -88,8 +88,8 @@ export default function DSAPage() {
       setAddingProblems(prev => new Set(prev).add(problemId));
       await dsaApi.addProblem(newlyCreatedListId, problemId);
       // Update the list in state
-      setLists(lists.map(list => 
-        list._id === newlyCreatedListId 
+      setLists(lists.map(list =>
+        list._id === newlyCreatedListId
           ? { ...list, problemIds: [...list.problemIds, problemId] }
           : list
       ));
@@ -130,20 +130,26 @@ export default function DSAPage() {
   return (
     <ProtectedRoute>
       <Navbar />
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-black dark:via-gray-900 dark:to-black transition-colors">
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+          <div className="mb-10">
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">DSA Dashboard</h1>
+            <p className="text-gray-600 dark:text-gray-400 mt-2 max-w-2xl">
+              Organize your problem lists, track progress, and master algorithms with structured practice.
+            </p>
+          </div>
+
           <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">DSA Lists</h1>
             <div className="flex space-x-4">
               <Link
                 href="/dsa/search"
-                className="px-4 py-2 bg-black text-white rounded-md hover:bg-blue-700"
+                className="px-5 py-2 bg-black dark:bg-white text-white dark:text-black rounded-md hover:opacity-90 transition font-medium"
               >
                 Search by Company
               </Link>
               <button
                 onClick={() => setShowCreateForm(!showCreateForm)}
-                className="px-4 py-2 bg-black text-white rounded-md hover:bg-black"
+                className="px-5 py-2 bg-black dark:bg-white text-white dark:text-black rounded-md hover:opacity-90 transition font-medium"
               >
                 Create List
               </button>
@@ -151,7 +157,7 @@ export default function DSAPage() {
           </div>
 
           {showCreateForm && (
-            <form onSubmit={handleCreateList} className="mb-6 bg-white p-4 rounded-lg shadow">
+            <form onSubmit={handleCreateList} className="mb-6 bg-white dark:bg-black border border-gray-200 dark:border-gray-800 p-6 rounded-xl shadow">
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700">List Name</label>
@@ -159,7 +165,7 @@ export default function DSAPage() {
                     type="text"
                     value={newListName}
                     onChange={(e) => setNewListName(e.target.value)}
-                    className="mt-1 block w-full border border-gray-300 rounded-md px-3 py-2"
+                    className="mt-1 block w-full border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white rounded-md px-3 py-2"
                     placeholder="Enter list name"
                     required
                   />
@@ -179,7 +185,7 @@ export default function DSAPage() {
                 <div className="flex space-x-2">
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-black text-white rounded-md hover:bg-blue-700"
+                    className="px-5 py-2 bg-black dark:bg-white text-white dark:text-black rounded-md hover:opacity-90 transition font-medium"
                   >
                     Create
                   </button>
@@ -190,7 +196,7 @@ export default function DSAPage() {
                       setNewListName('');
                       setIsPublic(false);
                     }}
-                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+                    className="px-5 py-2 bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 rounded-md hover:opacity-90 transition font-medium"
                   >
                     Cancel
                   </button>
@@ -200,13 +206,13 @@ export default function DSAPage() {
           )}
 
           {newlyCreatedListId && (
-            <div className="mb-8 bg-white rounded-lg shadow-lg p-6">
+            <div className="mb-8 bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg p-6">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold text-gray-900">Add Problems to Your List</h2>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Add Problems to Your List</h2>
                 <div className="flex gap-2">
                   <Link
                     href={`/dsa/lists/${newlyCreatedListId}`}
-                    className="px-4 py-2 bg-black text-white rounded-md hover:bg-blue-700 text-sm"
+                    className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 text-sm"
                   >
                     View List
                   </Link>
@@ -218,33 +224,31 @@ export default function DSAPage() {
                   </button>
                 </div>
               </div>
-              
+
               {loadingProblems ? (
-                <div className="text-center py-12">Loading problems...</div>
+                <div className="text-center py-12 text-gray-500 dark:text-gray-400">Loading problems...</div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-h-96 overflow-y-auto">
                   {problems.map((problem) => (
                     <div
                       key={problem._id}
                       onClick={() => handleAddProblem(problem._id)}
-                      className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                        addingProblems.has(problem._id)
-                          ? 'border-gray-300 bg-gray-100 opacity-50 cursor-not-allowed'
-                          : 'border-gray-200 hover:border-black hover:shadow-md'
-                      }`}
+                      className={`p-4 border-2 rounded-xl cursor-pointer transition-all transform hover:-translate-y-1 ${addingProblems.has(problem._id)
+                        ? 'border-gray-300 bg-gray-100 opacity-50 cursor-not-allowed'
+                        : 'border-gray-200 dark:border-gray-700 hover:border-black dark:hover:border-white hover:shadow-lg'
+                        }`}
                     >
                       <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
                         {problem.title}
                       </h3>
                       <div className="flex items-center gap-2">
                         <span
-                          className={`px-2 py-1 text-xs font-semibold rounded ${
-                            problem.difficulty === 'Easy'
-                              ? 'bg-green-100 text-green-800'
-                              : problem.difficulty === 'Medium'
+                          className={`px-2 py-1 text-xs font-semibold rounded ${problem.difficulty === 'Easy'
+                            ? 'bg-green-100 text-green-800'
+                            : problem.difficulty === 'Medium'
                               ? 'bg-yellow-100 text-yellow-800'
                               : 'bg-red-100 text-red-800'
-                          }`}
+                            }`}
                         >
                           {problem.difficulty}
                         </span>
@@ -270,25 +274,23 @@ export default function DSAPage() {
           )}
 
           <div className="mb-4">
-            <div className="border-b border-gray-200">
+            <div className="border-b border-gray-200 dark:border-gray-800">
               <nav className="-mb-px flex space-x-8">
                 <button
                   onClick={() => setActiveTab('my')}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                    activeTab === 'my'
-                      ? 'border-black text-black'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
+                  className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'my'
+                    ? 'border-black dark:border-white text-black dark:text-white'
+                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:border-gray-300'
+                    }`}
                 >
                   My Lists
                 </button>
                 <button
                   onClick={() => setActiveTab('public')}
-                  className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                    activeTab === 'public'
-                      ? 'border-black text-black'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
+                  className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'public'
+                    ? 'border-black text-black dark:border-white dark:text-white'
+                    : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-white hover:border-gray-300'
+                    }`}
                 >
                   Public Lists
                 </button>
@@ -299,35 +301,35 @@ export default function DSAPage() {
           {loading ? (
             <div className="text-center py-12">Loading...</div>
           ) : (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {(activeTab === 'my' ? lists : publicLists).map((list) => (
-                <div key={list._id} className="bg-white rounded-lg shadow p-6">
+                <div key={list._id} className="bg-white dark:bg-black border border-gray-200 dark:border-gray-800 rounded-xl shadow p-6 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                   <div className="flex justify-between items-start mb-4">
                     <Link href={`/dsa/lists/${list._id}`}>
-                      <h3 className="text-lg font-semibold text-gray-900 hover:text-black cursor-pointer">
+                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white hover:opacity-80 cursor-pointer">
                         {list.name}
                       </h3>
                     </Link>
                     {list.isPublic && (
-                      <span className="px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded">
+                      <span className="px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 dark:bg-green-900 dark:text-green-300 rounded-full">
                         Public
                       </span>
                     )}
                   </div>
-                  <p className="text-sm text-gray-500 mb-4">
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
                     {list.problemIds.length} problem{list.problemIds.length !== 1 ? 's' : ''}
                   </p>
                   <div className="flex space-x-2">
                     <Link
                       href={`/dsa/lists/${list._id}`}
-                      className="flex-1 text-center px-4 py-2 bg-black text-white rounded-md hover:bg-blue-700 text-sm"
+                      className="flex-1 text-center px-5 py-2 bg-black dark:bg-white text-white dark:text-black rounded-md hover:opacity-90 transition text-sm font-medium"
                     >
                       View
                     </Link>
                     {activeTab === 'my' && (
                       <button
                         onClick={() => handleDeleteList(list._id)}
-                        className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm"
+                        className="px-5 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 text-sm font-medium"
                       >
                         Delete
                       </button>
@@ -336,7 +338,7 @@ export default function DSAPage() {
                 </div>
               ))}
               {(activeTab === 'my' ? lists : publicLists).length === 0 && (
-                <div className="col-span-full text-center py-12 text-gray-500">
+                <div className="col-span-full text-center py-16 text-gray-500 dark:text-gray-400">
                   No lists found. {activeTab === 'my' ? 'Create your first list!' : 'No public lists available.'}
                 </div>
               )}
@@ -347,4 +349,3 @@ export default function DSAPage() {
     </ProtectedRoute>
   );
 }
-

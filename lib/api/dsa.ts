@@ -83,5 +83,15 @@ export const dsaApi = {
     }
     return response.data as DSAProblem;
   },
+
+  submitSolution: async (id: string, solution: string, language: string): Promise<any> => {
+    const response = await apiClient.post(`/dsa/problems/${id}/rate`, { solution, language });
+    return response.data;
+  },
+
+  checkCode: async (id: string, solution: string, language: string): Promise<{ valid: boolean; errors: string[] }> => {
+    const response = await apiClient.post<{ valid: boolean; errors: string[] }>(`/dsa/problems/${id}/check`, { solution, language });
+    return response.data;
+  },
 };
 

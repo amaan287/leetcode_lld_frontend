@@ -6,7 +6,7 @@ export const lldApi = {
     const params = new URLSearchParams();
     if (filters?.category) params.append('category', filters.category);
     if (filters?.difficulty) params.append('difficulty', filters.difficulty);
-    
+
     const response = await apiClient.get<LLDQuestion[]>(`/lld/questions?${params.toString()}`);
     return response.data;
   },
@@ -18,6 +18,11 @@ export const lldApi = {
 
   submitAnswer: async (questionId: string, answer: string): Promise<LLDAnswer> => {
     const response = await apiClient.post<LLDAnswer>(`/lld/questions/${questionId}/rate`, { answer });
+    return response.data;
+  },
+
+  checkCode: async (questionId: string, answer: string): Promise<{ valid: boolean; errors: string[] }> => {
+    const response = await apiClient.post<{ valid: boolean; errors: string[] }>(`/lld/questions/${questionId}/check`, { answer });
     return response.data;
   },
 
