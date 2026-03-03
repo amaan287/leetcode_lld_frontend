@@ -1,5 +1,5 @@
 import { apiClient } from './client';
-import { LLDQuestion, LLDAnswer } from '@/types';
+import { LLDQuestion, LLDAnswer, LLDOfficialSolution } from '@/types';
 
 export const lldApi = {
   getQuestions: async (filters?: { category?: string; difficulty?: string }): Promise<LLDQuestion[]> => {
@@ -28,6 +28,11 @@ export const lldApi = {
 
   getMyAnswers: async (): Promise<LLDAnswer[]> => {
     const response = await apiClient.get<LLDAnswer[]>('/lld/answers');
+    return response.data;
+  },
+
+  getOfficialSolutions: async (id: string): Promise<LLDOfficialSolution[]> => {
+    const response = await apiClient.get<LLDOfficialSolution[]>(`/lld/questions/${id}/solutions`);
     return response.data;
   },
 };

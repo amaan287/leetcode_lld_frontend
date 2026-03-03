@@ -1,13 +1,15 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { useAuth } from '@/hooks/useAuth';
 import { lldApi } from '@/lib/api/lld';
-import { LLDQuestion, LLDAnswer } from '@/types';
+import { LLDQuestion, LLDAnswer, LLDOfficialSolution } from '@/types';
 import CodeEditor from '@/components/CodeEditor';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 const LANGUAGES = [
   { label: 'Java', value: 'java' },
@@ -20,6 +22,8 @@ export default function QuestionDetailPage() {
   const params = useParams();
   const router = useRouter();
   const { isAuthenticated } = useAuth();
+  const searchParams = useSearchParams();
+  const tab = searchParams.get('tab');
   const questionId = params.id as string;
   const [question, setQuestion] = useState<LLDQuestion | null>(null);
   const [answer, setAnswer] = useState('');
@@ -29,20 +33,31 @@ export default function QuestionDetailPage() {
   const [submitting, setSubmitting] = useState(false);
   const [running, setRunning] = useState(false);
   const [validationResult, setValidationResult] = useState<{ valid: boolean; errors: string[] } | null>(null);
+  const [solutions, setSolutions] = useState<LLDOfficialSolution[]>([]);
+  const [showSolutions, setShowSolutions] = useState(false);
+  const [selectedSolutionIndex, setSelectedSolutionIndex] = useState(0);
+  const [selectedFileIndex, setSelectedFileIndex] = useState(0);
 
   useEffect(() => {
     if (!isAuthenticated()) {
       router.push('/auth/login');
       return;
     }
+    if (tab === 'solution') {
+      setShowSolutions(true);
+    }
     loadQuestion();
-  }, [questionId, isAuthenticated, router]);
+  }, [questionId, isAuthenticated, router, tab]);
 
   const loadQuestion = async () => {
     try {
       setLoading(true);
-      const data = await lldApi.getQuestion(questionId);
-      setQuestion(data);
+      const [questionData, solutionsData] = await Promise.all([
+        lldApi.getQuestion(questionId),
+        lldApi.getOfficialSolutions(questionId)
+      ]);
+      setQuestion(questionData);
+      setSolutions(solutionsData);
     } catch (error: any) {
       console.error('Failed to load question:', error);
       if (error.response?.status === 404) {
@@ -155,16 +170,20 @@ export default function QuestionDetailPage() {
                 {question.scenario && (
                   <div>
                     <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Scenario</h2>
-                    <div className="text-sm leading-relaxed whitespace-pre-wrap">
-                      {question.scenario}
+                    <div className="prose prose-sm dark:prose-invert max-w-none text-gray-600 dark:text-[#b3b3b3]">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {question.scenario}
+                      </ReactMarkdown>
                     </div>
                   </div>
                 )}
                 {question.description && (
                   <div>
                     <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Description</h2>
-                    <div className="text-sm leading-relaxed whitespace-pre-wrap">
-                      {question.description}
+                    <div className="prose prose-sm dark:prose-invert max-w-none text-gray-600 dark:text-[#b3b3b3]">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {question.description}
+                      </ReactMarkdown>
                     </div>
                   </div>
                 )}
@@ -178,31 +197,103 @@ export default function QuestionDetailPage() {
               <form onSubmit={handleSubmit} className="flex flex-col h-full">
                 {/* Editor Header */}
                 <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-[#3c3c3c] bg-gray-100 dark:bg-[#252526]">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Solution</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <select
-                      value={selectedLanguage}
-                      onChange={(e) => setSelectedLanguage(e.target.value)}
-                      className="bg-white dark:bg-[#1e1e1e] border border-gray-300 dark:border-[#3c3c3c] text-gray-900 dark:text-white text-xs rounded px-2 py-1 focus:outline-none transition-colors"
+                  <div className="flex items-center gap-4">
+                    <button
+                      type="button"
+                      onClick={() => setShowSolutions(false)}
+                      className={`text-sm font-medium transition-colors ${!showSolutions ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}
                     >
-                      {LANGUAGES.map((lang) => (
-                        <option key={lang.value} value={lang.value}>
-                          {lang.label}
-                        </option>
-                      ))}
-                    </select>
+                      Editor
+                    </button>
+                    {solutions.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setShowSolutions(true)}
+                        className={`text-sm font-medium transition-colors ${showSolutions ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'}`}
+                      >
+                        Official Solution
+                      </button>
+                    )}
                   </div>
+                  {!showSolutions ? (
+                    <div className="flex items-center gap-2">
+                      <select
+                        value={selectedLanguage}
+                        onChange={(e) => setSelectedLanguage(e.target.value)}
+                        className="bg-white dark:bg-[#1e1e1e] border border-gray-300 dark:border-[#3c3c3c] text-gray-900 dark:text-white text-xs rounded px-2 py-1 focus:outline-none transition-colors"
+                      >
+                        {LANGUAGES.map((lang) => (
+                          <option key={lang.value} value={lang.value}>
+                            {lang.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  ) : null}
                 </div>
 
-                {/* Code Editor Area */}
+                {/* Code Editor Area / Solution Viewer */}
                 <div className="flex-1 flex flex-col overflow-hidden relative">
-                  <CodeEditor
-                    value={answer}
-                    onChange={(val) => setAnswer(val || '')}
-                    language={selectedLanguage}
-                  />
+                  {!showSolutions ? (
+                    <CodeEditor
+                      value={answer}
+                      onChange={(val) => setAnswer(val || '')}
+                      language={selectedLanguage}
+                    />
+                  ) : (
+                    <div className="flex flex-col h-full bg-[#1e1e1e]">
+                      {/* Solution Tabs */}
+                      <div className="flex bg-[#252526] border-b border-[#3c3c3c] overflow-x-auto">
+                        {solutions.map((sol, idx) => (
+                          <button
+                            key={sol._id}
+                            onClick={() => {
+                              setSelectedSolutionIndex(idx);
+                              setSelectedFileIndex(0);
+                            }}
+                            className={`px-4 py-2 text-xs font-medium uppercase tracking-wider transition-colors border-r border-[#3c3c3c] ${selectedSolutionIndex === idx ? 'bg-[#1e1e1e] text-blue-400' : 'text-gray-400 hover:bg-[#2d2d2d]'}`}
+                          >
+                            {sol.language}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* File Browser + Code Viewer */}
+                      {solutions[selectedSolutionIndex] && (
+                        <div className="flex-1 flex overflow-hidden">
+                          {/* File Sidebar */}
+                          <div className="w-48 bg-[#252526] border-r border-[#3c3c3c] overflow-y-auto hidden md:block">
+                            <div className="p-2 text-[10px] uppercase font-bold text-gray-500 tracking-wider">Files</div>
+                            {solutions[selectedSolutionIndex].files.map((file, idx) => (
+                              <button
+                                key={idx}
+                                onClick={() => setSelectedFileIndex(idx)}
+                                className={`w-full text-left px-3 py-1.5 text-xs truncate transition-colors ${selectedFileIndex === idx ? 'bg-[#37373d] text-white' : 'text-gray-400 hover:bg-[#2a2d2e]'}`}
+                                title={file.path}
+                              >
+                                {file.name}
+                              </button>
+                            ))}
+                          </div>
+
+                          {/* Code Viewer */}
+                          <div className="flex-1 flex flex-col overflow-hidden">
+                            <div className="bg-[#1e1e1e] text-[10px] text-gray-500 px-3 py-1 border-b border-[#3c3c3c]">
+                              {solutions[selectedSolutionIndex].files[selectedFileIndex]?.path}
+                            </div>
+                            <div className="flex-1 overflow-hidden">
+                              <CodeEditor
+                                value={solutions[selectedSolutionIndex].files[selectedFileIndex]?.content || ''}
+                                onChange={() => { }}
+                                language={solutions[selectedSolutionIndex].language}
+                                readOnly={true}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* Run Results / Status Area */}

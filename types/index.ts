@@ -61,6 +61,7 @@ export interface ListWithProblems {
 export interface LLDQuestion {
   _id: string;
   title: string;
+  slug: string;
   scenario: string;
   description: string;
   category: string;
@@ -87,5 +88,17 @@ export interface DSASolution {
   rating?: number;
   feedback?: string;
   submittedAt: string;
+}
+
+export interface LLDOfficialSolution {
+  _id: string;
+  questionId: string;
+  language: string;
+  content: string;
+  files: Array<{
+    name: string;
+    content: string;
+    path: string;
+  }>;
 }
 

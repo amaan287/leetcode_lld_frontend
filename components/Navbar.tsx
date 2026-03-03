@@ -39,6 +39,7 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           {navItem('/dsa', 'DSA')}
           {navItem('/lld', 'LLD')}
+          {navItem('/lld/solutions', 'Solutions')}
 
           <button
             onClick={toggleTheme}

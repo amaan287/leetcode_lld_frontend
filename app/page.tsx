@@ -96,6 +96,14 @@ export default function Home() {
                     <p className="mt-5 text-lg text-gray-500 dark:text-gray-400 leading-relaxed">
                       Practice machine coding round questions. Submit your solutions and get AI-powered ratings and feedback to improve your design skills.
                     </p>
+                    <div className="mt-6 flex flex-wrap gap-2 relative z-10">
+                      <Link href="/lld" className="px-4 py-2 bg-black dark:bg-white text-white dark:text-black text-xs font-bold rounded-lg hover:scale-105 transition-all">
+                        Questions
+                      </Link>
+                      <Link href="/lld/solutions" className="px-4 py-2 bg-white dark:bg-black text-black dark:text-white border border-gray-200 dark:border-gray-800 text-xs font-bold rounded-lg hover:scale-105 transition-all">
+                        Official Solutions
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
